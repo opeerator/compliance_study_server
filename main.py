@@ -36,34 +36,36 @@ def generate_hash_code():
 def login():
     data = request.json
     hash_code = data.get('hash_code')
-
     participant = Participant.query.filter_by(hash_code=hash_code).first()
     if participant:
-        return jsonify({'message': 'Access'}), 200
+        return jsonify({'message': 'Valid'}), 200
     else:
-        return jsonify({'message': 'Deny'}), 400
+        return jsonify({'message': 'Unvalid'}), 400
 
-@app.route('/check_game_status', methods=['GET'])
+@app.route('/check_game_status', methods=['POST'])
 def check_game_status():
     data = request.json
     hash_code = data.get('hash_code')
-
     participant = Participant.query.filter_by(hash_code=hash_code).first()
-    if participant:
-        # Get current date and time in Toronto time zone
-        current_datetime_toronto = datetime.now(toronto_tz)
-
-        # Check if participant is within the allowed time range to play today's game
-        if current_datetime_toronto.time() >= datetime.min.time() and current_datetime_toronto.time() <= datetime.max.time():
-            # Calculate current game day based on Toronto date and time
-            days_since_start = (current_datetime_toronto.date() - participant.start_date).days
-            current_game_day = min(days_since_start + 1, 8)  # Ensure maximum of 8 days
-
-            return jsonify({'message': 'You can play today\'s game', 'current_game_day': current_game_day}), 200
-        else:
-            return jsonify({'message': 'You are outside the allowed time range to play today\'s game'}), 403
-    else:
+    if not participant:
         return jsonify({'message': 'Participant not found'}), 404
+
+    current_datetime_toronto = datetime.now(toronto_tz)
+    # Check if the current time is within the allowed time range to play today's game
+    if current_datetime_toronto.time() < datetime.min.time() or current_datetime_toronto.time() > datetime.max.time():
+        return jsonify({'message': 'You are outside the allowed time range to play today\'s game'}), 403
+
+    # Calculate current game day based on Toronto date and time
+    days_since_start = (current_datetime_toronto.date() - participant.start_date).days
+    current_game_day = min(days_since_start + 1, 8)  # Ensure maximum of 8 days
+
+    # Check if the game for the specified game day is already played
+    game_data_exists = GameData.query.filter_by(participant_id=participant.id, game_day=current_game_day).first()
+    if game_data_exists:
+        return jsonify({'message': 'Already Submitted', 'current_game_day': 0}), 403
+
+    return jsonify({'message': 'Play', 'current_game_day': current_game_day}), 200
+
     
 @app.route('/send_game_data', methods=['POST'])
 def send_game_data():
@@ -102,4 +104,4 @@ def send_game_data():
         return jsonify({'message': 'Participant not found'}), 404
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
