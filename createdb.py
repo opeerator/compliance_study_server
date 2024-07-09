@@ -13,6 +13,7 @@ def db_make(app):
             start_date = db.Column(db.Date)  # Added start_date field
             end_date = db.Column(db.Date)    # Added end_date field
             current_game_day = db.Column(db.Integer, default=1)  # Added current_game_day field
+            condition = db.Column(db.String(2), nullable=False)  # Added condition field
         class GameStatus(db.Model):
             id = db.Column(db.Integer, primary_key=True)
             day = db.Column(db.Integer, nullable=False)
@@ -30,6 +31,7 @@ def db_make(app):
             question_3 = db.Column(db.Integer, nullable=False)
             question_4 = db.Column(db.Integer, nullable=False)
             question_5 = db.Column(db.Integer, nullable=False)
+            image_path = db.Column(db.String(256), nullable=True)  # Add this line
 
         db.create_all()
     
