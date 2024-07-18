@@ -1,4 +1,4 @@
-version: "3.0"
+version: '3.8'
 
 services:
   flaskapp:
@@ -10,14 +10,3 @@ services:
     environment:
       - FLASK_ENV=production
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"   # HTTP port
-      - "443:443" # HTTPS port
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./ssl:/etc/nginx/ssl
-    depends_on:
-      - flaskapp

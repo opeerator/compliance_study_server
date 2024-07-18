@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.9.10-alpine3.14
+FROM python:3.8-slim
 
 # Set environment variables to ensure Python runs in unbuffered and maximally compatible mode
 ENV PYTHONUNBUFFERED 1
@@ -14,11 +14,11 @@ COPY requirements.txt /backend/
 # Install the dependencies
 RUN pip install -r requirements.txt
 
-# Create the uploads/images directory
-RUN mkdir -p /backend/uploads/images
-
 # Copy the current directory contents into the container at /backend
 COPY . /backend/
+
+# Create the uploads/images directory
+RUN mkdir -p /backend/uploads/images
 
 # Expose the port on which the Flask app will run (replace 5000 with your desired port)
 EXPOSE 5000
