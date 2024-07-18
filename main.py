@@ -52,7 +52,7 @@ def login():
     if participant:
         return jsonify({'message': 'Valid', 'condition': participant.condition}), 200
     else:
-        return jsonify({'message': 'Unvalid'}), 400
+        return jsonify({'message': 'Unvalid'}), 403
 
 @app.route('/check_game_status', methods=['POST'])
 def check_game_status():
