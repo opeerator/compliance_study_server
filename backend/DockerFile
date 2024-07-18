@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.8-slim
+FROM python:3.9.10-alpine3.14
 
 # Set environment variables to ensure Python runs in unbuffered and maximally compatible mode
 ENV PYTHONUNBUFFERED 1
