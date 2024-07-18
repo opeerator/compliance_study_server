@@ -1,15 +1,11 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.8-slim
-
-# Set environment variables to ensure Python runs in unbuffered and maximally compatible mode
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+FROM python:3.8-alpine
 
 # Set the working directory to /backend
 WORKDIR /backend
 
 # Copy the requirements.txt file into the container at /backend
-COPY requirements.txt /backend/
+COPY ./requirements.txt /backend/
 
 # Install the dependencies
 RUN pip install -r requirements.txt
