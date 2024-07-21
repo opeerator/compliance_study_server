@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from createdb import db_make
 from datetime import datetime, timedelta
 import pytz
+from flask_migrate import Migrate
 
 # Assuming timezone is Toronto time (Eastern Time)
 toronto_tz = pytz.timezone('America/Toronto')
@@ -18,11 +19,13 @@ images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
 
 db, Participant, GameStatus, GameData = db_make(app)
+migrate = Migrate(app, db) # migrate if there is any changes
 
 @app.route('/generate_hash_code', methods=['POST'])
 def generate_hash_code():
     data = request.json
     condition = data.get('condition')
+    name = data.get('name')
     if condition not in ['c1', 'c2', 'c3', 'c4']:
         return jsonify({'message': 'Invalid condition'}), 400
     
@@ -38,7 +41,7 @@ def generate_hash_code():
     end_date = today_toronto + timedelta(days=7)
 
     # Store start and end dates for the game session
-    participant = Participant(participant_id=unique_id, hash_code=hash_code, start_date=start_date, end_date=end_date, condition=condition)
+    participant = Participant(participant_id=unique_id, p_name=name, hash_code=hash_code, start_date=start_date, end_date=end_date, condition=condition)
     db.session.add(participant)
     db.session.commit()
 
