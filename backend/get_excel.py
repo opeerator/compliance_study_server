@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -34,6 +34,7 @@ class GameData(Base):
     question_4 = Column(Integer, nullable=False)
     question_5 = Column(Integer, nullable=False)
     image_path = Column(String(256), nullable=True)
+    timestamp = Column(DateTime, nullable=False)
 
 # Create all tables in the database
 Base.metadata.create_all(engine)
@@ -76,7 +77,8 @@ for data in game_data_query:
         f'game_day_{data.game_day}_question_2': data.question_2,
         f'game_day_{data.game_day}_question_3': data.question_3,
         f'game_day_{data.game_day}_question_4': data.question_4,
-        f'game_day_{data.game_day}_question_5': data.question_5
+        f'game_day_{data.game_day}_question_5': data.question_5,
+        'timestamp': data.timestamp
     }
     game_data_list.append(game_data_dict)
 

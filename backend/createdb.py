@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 
 def db_make(app):
     with app.app_context():
@@ -32,6 +34,7 @@ def db_make(app):
             question_4 = db.Column(db.Integer, nullable=False)
             question_5 = db.Column(db.Integer, nullable=False)
             image_path = db.Column(db.String(256), nullable=True)  # Add this line
+            timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)  # Add timestamp field
 
         db.create_all()
     
