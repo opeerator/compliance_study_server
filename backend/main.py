@@ -92,6 +92,8 @@ def send_game_data():
     selected_items = data.get('selected_items')
     total_items = data.get('total_items')
     questions = data.get('questions').split(',') # Assuming it's a list of 5 numbers
+    
+    submission_time = datetime.now(toronto_tz)
     # Find participant by hash code
     participant = Participant.query.filter_by(hash_code=participant_hash_code).first()
     if participant:
@@ -126,8 +128,8 @@ def send_game_data():
             question_3=questions[2],
             question_4=questions[3],
             question_5=questions[4],
-            image_path=image_path  # Save image path
-            timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)  # Add timestamp field
+            image_path=image_path,  # Save image path
+            timestamp = submission_time
         )
         db.session.add(new_game_data)
         db.session.commit()
