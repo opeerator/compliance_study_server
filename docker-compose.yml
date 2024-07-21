@@ -4,9 +4,15 @@ services:
   flaskapp:
     build: ./backend
     ports:
-      - "5000:5000"  # Expose container port 5000 on host port 5000
+      - "5000:5000"
     volumes:
-      - ./ssl:/backend/ssl  # Mount SSL certificates if needed
+      - ./ssl:/backend/ssl
+      - ./home/sirrl/Yamini/compliance_mounted_volumes/images:/backend/uploads/images  # Mount host directory to container
+      - ./home/sirrl/Yamini/compliance_mounted_volumes/database:/backend/instance  # Mount host directory to container
     environment:
       - FLASK_ENV=production
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+
+volumes:
+  flaskapp-images:
+  flaskapp-instance:
