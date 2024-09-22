@@ -132,7 +132,7 @@ def send_game_data():
             question_4=questions[3],
             question_5=questions[4],
             image_path=image_path,  # Save image path
-            timestamp = submission_time
+            submit_time = submission_time
         )
         db.session.add(new_game_data)
         db.session.commit()

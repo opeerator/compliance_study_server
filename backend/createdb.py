@@ -37,7 +37,7 @@ class GameData(db.Model):
     question_4 = db.Column(db.Integer, nullable=False)
     question_5 = db.Column(db.Integer, nullable=False)
     image_path = db.Column(db.String(256), nullable=True)  # Add this line
-    timestamp = db.Column(db.DateTime, nullable=False, default=submission_time)  # Add timestamp field
+    submit_time = db.Column(db.DateTime, nullable=False, default=submission_time)  # Add timestamp field
 
 def db_make(app):
     db.init_app(app)

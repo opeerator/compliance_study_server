@@ -34,7 +34,7 @@ class GameData(Base):
     question_4 = Column(Integer, nullable=False)
     question_5 = Column(Integer, nullable=False)
     image_path = Column(String(256), nullable=True)
-    timestamp = Column(DateTime, nullable=False)
+    submit_time = Column(DateTime, nullable=False)
 
 # Create all tables in the database
 Base.metadata.create_all(engine)
@@ -78,7 +78,7 @@ for data in game_data_query:
         f'game_day_{data.game_day}_question_3': data.question_3,
         f'game_day_{data.game_day}_question_4': data.question_4,
         f'game_day_{data.game_day}_question_5': data.question_5,
-        'timestamp': data.timestamp
+        'submit_time': data.submit_time
     }
     game_data_list.append(game_data_dict)
 
